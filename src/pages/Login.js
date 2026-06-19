@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -12,12 +13,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/login', form);
+      const res = await axios.post(API_URL + '/api/login', form);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('name', res.data.name);
       localStorage.setItem('role', res.data.role);
       navigate('/');
-    } catch (err) { setMessage('Invalid email or password'); }
+    } catch (err) {
+      setMessage('Invalid email or password');
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'student' });
@@ -12,10 +13,12 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/register', form);
+      const res = await axios.post(API_URL + '/api/register', form);
       setMessage(res.data.message);
       setTimeout(() => navigate('/login'), 2000);
-    } catch (err) { setMessage(err.response.data.error); }
+    } catch (err) {
+      if (err.response) { setMessage(err.response.data.error); } else { setMessage('Connection error!'); }
+    }
   };
 
   return (

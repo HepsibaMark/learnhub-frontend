@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 function Home() {
   const [courses, setCourses] = useState([]);
@@ -11,7 +12,7 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/courses')
+    axios.get(API_URL + '/api/courses')
       .then(res => setCourses(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -19,9 +20,9 @@ function Home() {
   const handleEnroll = async (course_id) => {
     if (!token) { navigate('/login'); return; }
     try {
-      const res = await axios.post('http://127.0.0.1:5000/api/enroll', { course_id }, { headers: { Authorization: 'Bearer ' + token } });
+      const res = await axios.post(API_URL + '/api/enroll', { course_id }, { headers: { Authorization: 'Bearer ' + token } });
       setMessage(res.data.message);
-    } catch (err) { setMessage(err.response.data.error); }
+    } catch (err) { setMessage('Could not enroll'); }
   };
 
   const handleLogout = () => { localStorage.clear(); navigate('/login'); };
@@ -60,7 +61,7 @@ function Home() {
             return (
               <div key={course.id} style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
                 <div style={{ background: color, height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '48px' }}>??</span>
+                  <span style={{ fontSize: '48px', color: 'white' }}>Course</span>
                 </div>
                 <div style={{ padding: '20px' }}>
                   <h3 style={{ margin: '0 0 8px', color: '#1a1a1a' }}>{course.title}</h3>

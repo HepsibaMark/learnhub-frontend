@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 function Dashboard() {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -10,20 +11,20 @@ function Dashboard() {
 
   useEffect(() => {
     if (!token) { navigate('/login'); return; }
-    axios.get('http://127.0.0.1:5000/api/dashboard', { headers: { Authorization: 'Bearer ' + token } })
+    axios.get(API_URL + '/api/dashboard', { headers: { Authorization: 'Bearer ' + token } })
       .then(res => setEnrolledCourses(res.data))
       .catch(err => console.log(err));
   }, []);
 
   const handleCertificate = (course_id) => {
-    window.open('http://127.0.0.1:5000/api/certificate/' + course_id + '?token=' + token, '_blank');
+    window.open(API_URL + '/api/certificate/' + course_id + '?token=' + token, '_blank');
   };
 
   return (
     <div style={{ fontFamily: 'Segoe UI, sans-serif', minHeight: '100vh', background: '#f8f9fa' }}>
       <div style={{ background: '#0056D2', padding: '16px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 style={{ color: 'white', margin: 0, fontSize: '24px' }}>LearnHub</h1>
-        <button onClick={() => navigate('/')} style={{ padding: '8px 20px', background: 'white', color: '#0056D2', border: 'none', borderRadius: '20px', cursor: 'pointer', fontWeight: 'bold' }}>Back to Courses</button>
+        <button onClick={() => navigate('/')} style={{ padding: '8px 20px', background: 'white', color: '#0056D2', border: 'none', borderRadius: '20px', cursor: 'pointer' }}>Back to Courses</button>
       </div>
       <div style={{ padding: '40px' }}>
         <h2 style={{ fontSize: '28px', color: '#1a1a1a', marginBottom: '8px' }}>My Dashboard</h2>
